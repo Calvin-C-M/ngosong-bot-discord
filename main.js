@@ -91,26 +91,12 @@ Bot.on('message', message => {
     }
 
     if(comm[0] === "tebak") {
-        const tebak = getJSONFile("./data/tebak.json");
         if(comm[1] === "angka") {
-            const number = Math.floor((Math.random() * 1000)+1);
-            if(comm[2] === number.toString()) {
-                sendMessage(`Yapp betul angkanya adalah ${number}`);
-            } else {
-                sendMessage(`Tetot, anda salah HHAHAA. Angkanya itu ${number}`);
-            }
+            Bot.commands.get('tebak_angka').execute(message,comm[2])
         }
 
         if(comm[1] === "hewan") {
-            const animals = tebak.hewan;
-            // console.log(animals)
-            const pickRandom = animals[Math.floor(Math.random() * animals.length)]
-
-            if(comm[2] === pickRandom) {
-                sendMessage(`Mantap hoki sekali hidup anda, jawabannya ${pickRandom}`)
-            } else {
-                sendMessage(`HEHEHHEHE ANDA SALAH SILAHKAN COBA LAGI. Tadi jawabannya ${pickRandom}`)
-            }
+            Bot.commands.get('tebak_hewan').execute(message,comm[2])
         }
     }
 
