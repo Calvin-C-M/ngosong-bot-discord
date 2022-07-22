@@ -74,6 +74,10 @@ Bot.on('message', message => {
         Bot.commands.get('absen').execute(message,user)
     }
 
+    if(command==="colek") {
+        Bot.commands.get('colek').execute(message,user)
+    }
+
 
     if(comm[0] === 'jadwal') {
         if(comm[1] === "a" || comm[1] === "A" || comm[1] === "kelas_a") {
@@ -108,16 +112,6 @@ Bot.on('message', message => {
                 sendMessage(`HEHEHHEHE ANDA SALAH SILAHKAN COBA LAGI. Tadi jawabannya ${pickRandom}`)
             }
         }
-    }
-
-    if(command === "colek") { 
-        const text = [
-            "Apaan", `Bacot maneh ${user}`, "Sia ngajak ribut bae", "Jangan ganggu cok",
-            "Lapangan kosong, ayo gelud", "Ajak ribut yang lain aelah"
-        ]
-        const randomText = text[Math.floor(Math.random() * text.length)]
-
-        sendMessage(randomText)
     }
 
     if(comm[0] === "santet") {
