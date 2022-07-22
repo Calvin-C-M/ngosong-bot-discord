@@ -1,0 +1,24 @@
+{
+    "werewolf": {
+        "roles" : [
+            { 
+                "name": "Werewolf" 
+            }, 
+            { 
+                "name": "Warga" 
+            }, 
+            { 
+                "name": "Seer" 
+            }, 
+            { 
+                "name": "Anak Werewolf" 
+            },
+            {
+                "name": "Bodyguard"
+            },
+            {
+                
+            }
+        ]
+    }
+}

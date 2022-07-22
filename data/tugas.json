@@ -1,0 +1,34 @@
+{
+    "tugas": [
+        {
+            "title": "Latihan MatDisk",
+            "matkul": "MatDisk",
+            "deskripsi": "2 soal tea"
+        },
+        {
+            "title": "Latihan PBO",
+            "matkul": "PBO (Praktikum)",
+            "deskripsi": "Bikin UML sama project sendiri"
+        },
+        {
+            "title": "Tugas PemWeb",
+            "matkul": "PemWeb (Praktikum)",
+            "deskripsi": "Latihan css sama kerjain si project"
+        },
+        {
+            "title": "Latihan Metnum",
+            "matkul": "Metnum (Praktikum)",
+            "deskripsi": "1 soal yang dari praktikum"
+        },
+        {
+            "title": "Laporan PBO",
+            "matkul": "PBO",
+            "deskripsi": "Selesaiin tugas 3 pake method"
+        },
+        {
+            "title": "Diskusi Ide",
+            "matkul": "Entre",
+            "deskripsi": "Diskusiin lagi si ide entrenya"
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "members": [
+        { "name": "Abang", "sudah": false }, 
+        { "name": "Nopal", "sudah": false }, 
+        { "name": "Anna", "sudah": false },
+        { "name": "Dean", "sudah": false }, 
+        { "name": "Lora", "sudah": false }, 
+        { "name": "Rafa", "sudah": false }
+    ]
+}

@@ -1,0 +1,32 @@
+{
+    "truth": [
+        { "desc": "Sebutin dan berikan alasan sifat2 yg ga km suka dari setiap pemain", "sudah": false }, 
+        { "desc": "Sebutin dan berikan alasan sifat2 yg km suka dari setiap pemain", "sudah": false },
+        { "desc": "Siapa yg paling jorok?", "sudah": false }, 
+        { "desc": "Siapa yg paling kepo?", "sudah": false },
+        { "desc": "Ceritain hal lucu yg pertama km alamin bareng tiap pemain?", "sudah": false }, 
+        { "desc": "Kesan pertama ketemu para pemain?", "sudah": false },
+        { "desc": "Ceritain pengalaman horor?", "sudah": false }, 
+        { "desc": "Ceritain hal yg bikin kangen pas km lg gabut dan yg lain pd sibuk masing2?", "sudah": false },
+        { "desc": "Siapa yg paling cerewet?", "sudah": false },
+        { "desc": "Apa hal yang paling kejam yang pernah kamu lakukan pada seseorang?", "sudah": false },
+        { "desc": "Apa nama panggilanmu yang paling memalukan?", "sudah": false },
+        { "desc": "Apa momen paling canggung yang pernah kamu alami?", "sudah": false },
+        { "desc": "Apa mimpi teraneh yang pernah kamu alami?", "sudah": false },
+        { "desc": "Pakaian apa yang menurutmu paling buruk? Apa kamu pernah memakainya dan kapan?", "sudah": false },
+        { "desc": "Apa yang kamu pikirkan ketika sedang bercermin?", "sudah": false }
+    ],
+    "dare": [
+        { "desc": "Joged keju (durasi ditentuin pemain lain)", "sudah": false }, 
+        { "desc": "Bikin puisi romantis", "sudah": false },
+        { "desc": "Ngomong bahasa malay selama 2 putaran", "sudah": false }, 
+        { "desc": "Bikin ketawa semua pemain", "sudah": false },
+        { "desc": "Bikin sg pake foto ala2 artis", "sudah": false }, 
+        { "desc": "Chat di grup (ditentuin sama pemain lain)", "sudah": false },
+        { "desc": "Kirim chat kepada seseorang yang belum pernah chatan/udah lama gak chatan selama 1 tahun", "sudah": false },
+        { "desc": "Kirim chat ke seseorang yang disuka dan minta doi VN", "sudah": false },
+        { "desc": "Rekam video kamu sedang melakukan tarian gila dan unggah ke medsos", "sudah": false },
+        { "desc": "Harus menuruti semua perkataan pemain sebelumnya selama 20 menit ke depan", "sudah": false },
+        { "desc": "Call orang yang dipilih sama pemain lama dan nyanyi HBD", "sudah": false }
+    ]
+}
