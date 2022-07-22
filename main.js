@@ -78,7 +78,6 @@ Bot.on('message', message => {
         Bot.commands.get('colek').execute(message,user)
     }
 
-
     if(comm[0] === 'jadwal') {
         if(comm[1] === "a" || comm[1] === "A" || comm[1] === "kelas_a") {
             Bot.commands.get('jadwal_kelas_a').execute(message, args, Discord, conn)
@@ -101,23 +100,7 @@ Bot.on('message', message => {
     }
 
     if(comm[0] === "santet") {
-        if(comm[1] === null) return;
-
-        const jawaban = getJSONFile("./data/santet.json");
-        const berhasil = jawaban.berhasil;
-        const gagal = jawaban.gagal;
-
-        const santet = Math.floor(Math.random() * 2);
-        const nama = comm[1];
-        // console.log(santet)  
-
-        if(!!santet) {
-            const textBerhasil = berhasil[Math.floor(Math.random() * berhasil.length)]
-            sendMessage(`${nama} berhasil disantet! ${nama} ${textBerhasil}`)
-        } else {
-            const textGagal = gagal[Math.floor(Math.random() * gagal.length)]
-            sendMessage(`${nama} gagal disantet! ${nama} ${textGagal}`)
-        }
+        Bot.commands.get('santet').execute(message,comm[1])
     }
 
     if(comm[0] == "tag") {
