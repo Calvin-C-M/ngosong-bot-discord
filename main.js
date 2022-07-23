@@ -248,9 +248,10 @@ Bot.on('message', message => {
     }
 
     if(comm[0] === "tobat") {
-        const taggedUser=comm[1]
-        deleteMessage(message, 300)
-        sendMessage(`Bertobatlah nak ${taggedUser}`)
+        Bot.commands.get('tobat').execute(message,user,comm[1])
+        // const taggedUser=comm[1]
+        // deleteMessage(message, 300)
+        // sendMessage(`Bertobatlah nak ${taggedUser}`)
     }
 
     if(comm[0] === "tabungan") {

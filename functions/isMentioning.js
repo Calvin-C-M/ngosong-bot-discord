@@ -1,1 +1,1 @@
-module.exports = (target) => target.startsWith('<@!') && target.endsWith('>')
+module.exports = (target) => target.startsWith('<@') && target.endsWith('>')
