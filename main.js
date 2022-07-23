@@ -53,8 +53,8 @@ Bot.on('message', message => {
     // Functions
     const sendReply = (text) => message.reply(text)
     const sendMessage = (text) => message.channel.send(text) // Sends message to the Discord
-    const isMentioning = (mention) => mention.startsWith('<@!') && mention.endsWith('>') // Check if sender is mentioning a member
-    const getJSONFile = (file) => JSON.parse(fs.readFileSync(file).toString()) // Read the JSON files
+    const isMentioning = require('./functions/isMentioning')
+    const getJSONFile = require('./functions/getJsonFile')
     const deleteMessage = (msg,time) => setTimeout(() => msg.delete(), time) // Deleting the command message
 
     // Commands
@@ -78,6 +78,14 @@ Bot.on('message', message => {
         Bot.commands.get('colek').execute(message,user)
     }
 
+    if(comm[0] === "tobat") {
+        Bot.commands.get('tobat').execute(message,user,comm[1])
+    }
+
+    if(comm[0] === "santet") {
+        Bot.commands.get('santet').execute(message,comm[1])
+    }
+
     if(comm[0] === 'jadwal') {
         if(comm[1] === "a" || comm[1] === "A" || comm[1] === "kelas_a") {
             Bot.commands.get('jadwal_kelas_a').execute(message, args, Discord, conn)
@@ -99,25 +107,8 @@ Bot.on('message', message => {
         }
     }
 
-    if(comm[0] === "santet") {
-        Bot.commands.get('santet').execute(message,comm[1])
-    }
-
     if(comm[0] == "tag") {
-        if(comm[1] == null) return;
-        deleteMessage(message, 300)
-        if(isMentioning(comm[1])) {
-            const loops = parseInt(comm[2])
-            if(loops > 10) {
-                sendMessage("Wahai kalian... Berhentilah mengganggu orang lain")
-            } else {
-                for(let i=0; i<loops; i++ ) {
-                    setTimeout(() => sendMessage(comm[1]), 100);
-                }
-            }
-        } else {
-            sendMessage(`Siapa yang mau dispam ngab ${user}?`);
-        }
+        Bot.commands.get('tag').execute(message,user,comm[1],comm[2])
     }
 
     if(comm[0] === "tod") {
@@ -245,13 +236,6 @@ Bot.on('message', message => {
             case 1: sendMessage("Haduhhhh aing kalah")
                 break;
         }
-    }
-
-    if(comm[0] === "tobat") {
-        Bot.commands.get('tobat').execute(message,user,comm[1])
-        // const taggedUser=comm[1]
-        // deleteMessage(message, 300)
-        // sendMessage(`Bertobatlah nak ${taggedUser}`)
     }
 
     if(comm[0] === "tabungan") {
