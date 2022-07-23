@@ -182,60 +182,60 @@ Bot.on('message', message => {
     }
 
     if(comm[0] === "suit") {
-        const convertToNumber = (text) => {
-
-            // Gunting = 0
-            // Batu = 1
-            // Kertas = 2
-
-            const ans = text.toLowerCase();
-            switch(ans) {
-                case 'gunting': return 0;
-                case 'batu': return 1;
-                case "kertas": return 2;
-                default: return -1;
-            }
+        if(comm[1] === undefined || comm[1] === null) {
+            message.channel.send(`Cara suit: Tulis ${prefix}suit gunting/batu/kertas`)
+        } else {
+            Bot.commands.get('suit').execute(message,comm[1])
         }
+        // const convertToNumber = (text) => {
 
-        const setWin = (a,b) => {
-            if(a === b) {
-                return -1;
-            }
+        //     // Gunting = 0
+        //     // Batu = 1
+        //     // Kertas = 2
 
-            if(
-                (a === 0 && b === 2)
-                ||
-                (a === 1 && b === 0)
-                ||
-                (a === 2 && b === 1)
-            ) {
-                return 1; // Jika menang
-            }
-            return 0; // Jika kalah
-        }
+        //     const ans = text.toLowerCase();
+        //     switch(ans) {
+        //         case 'gunting': return 0;
+        //         case 'batu': return 1;
+        //         case "kertas": return 2;
+        //         default: return -1;
+        //     }
+        // }
 
-        if(comm[1] === undefined) {
-            sendMessage(`Cara suit: Tulis ${prefix}suit gunting/batu/kertas`);
-            return;
-        }
-        const player = convertToNumber(comm[1]);
-        const enemy = Math.floor(Math.random() * 3);
-        const win = setWin(player, enemy);
+        // const setWin = (a,b) => {
+        //     if(a === b) {
+        //         return -1;
+        //     }
 
-        setTimeout(() => {
-            sendMessage(`Aing lawan pake ${
-                (enemy === 1 ? "Batu" : (enemy === 2) ? "Kertas" : "Gunting")
-            }`)
-        }, 300)
+        //     if(
+        //         (a === 0 && b === 2)
+        //         ||
+        //         (a === 1 && b === 0)
+        //         ||
+        //         (a === 2 && b === 1)
+        //     ) {
+        //         return 1; // Jika menang
+        //     }
+        //     return 0; // Jika kalah
+        // }
+        // const player = convertToNumber(comm[1]);
+        // const enemy = Math.floor(Math.random() * 3);
+        // const win = setWin(player, enemy);
+
+        // setTimeout(() => {
+        //     sendMessage(`Aing lawan pake ${
+        //         (enemy === 1 ? "Batu" : (enemy === 2) ? "Kertas" : "Gunting")
+        //     }`)
+        // }, 300)
         
-        switch(win) {
-            case -1: sendMessage("Okeh good game kita seri")
-                break;
-            case 0: sendMessage("HEHEHEE ANDA KALAH")
-                break;
-            case 1: sendMessage("Haduhhhh aing kalah")
-                break;
-        }
+        // switch(win) {
+        //     case -1: sendMessage("Okeh good game kita seri")
+        //         break;
+        //     case 0: sendMessage("HEHEHEE ANDA KALAH")
+        //         break;
+        //     case 1: sendMessage("Haduhhhh aing kalah")
+        //         break;
+        // }
     }
 
     if(comm[0] === "tabungan") {
