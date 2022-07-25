@@ -38,7 +38,7 @@ Bot.on('message', message => {
 
     const table = {
         currency: "currency",
-        tugas: "daftar_tugas",
+        tugas: "tugas",
     }
 
     // SQL Functions
@@ -187,107 +187,68 @@ Bot.on('message', message => {
         } else {
             Bot.commands.get('suit').execute(message,comm[1])
         }
-        // const convertToNumber = (text) => {
-
-        //     // Gunting = 0
-        //     // Batu = 1
-        //     // Kertas = 2
-
-        //     const ans = text.toLowerCase();
-        //     switch(ans) {
-        //         case 'gunting': return 0;
-        //         case 'batu': return 1;
-        //         case "kertas": return 2;
-        //         default: return -1;
-        //     }
-        // }
-
-        // const setWin = (a,b) => {
-        //     if(a === b) {
-        //         return -1;
-        //     }
-
-        //     if(
-        //         (a === 0 && b === 2)
-        //         ||
-        //         (a === 1 && b === 0)
-        //         ||
-        //         (a === 2 && b === 1)
-        //     ) {
-        //         return 1; // Jika menang
-        //     }
-        //     return 0; // Jika kalah
-        // }
-        // const player = convertToNumber(comm[1]);
-        // const enemy = Math.floor(Math.random() * 3);
-        // const win = setWin(player, enemy);
-
-        // setTimeout(() => {
-        //     sendMessage(`Aing lawan pake ${
-        //         (enemy === 1 ? "Batu" : (enemy === 2) ? "Kertas" : "Gunting")
-        //     }`)
-        // }, 300)
-        
-        // switch(win) {
-        //     case -1: sendMessage("Okeh good game kita seri")
-        //         break;
-        //     case 0: sendMessage("HEHEHEE ANDA KALAH")
-        //         break;
-        //     case 1: sendMessage("Haduhhhh aing kalah")
-        //         break;
-        // }
     }
 
     if(comm[0] === "tabungan") {
-        conn.connect(err => {
-            if(err) throw err;
-
-            if(comm[1] === undefined) {
-                const query=`SELECT * FROM ${table.currency} WHERE discord_id='${user}'`;
-
-                conn.query(query, (err, res, fields) => {
-                    if(err) throw err;
-                    if(dataNotFound(res)) {
-                        sendMessage(`${user} belum membuka tabungan`)
-                    } else {
-                        const bal=res[0].balance
-                        sendMessage(`Jumlah tabungan ${user} adalah Rp${bal}`)
-                    }
-                })
+        if(comm[1] === undefined || comm[1] === null) {
+            Bot.commands.file('tabungan').execute(message,user,conn)
+        } else {
+            if(isMentioning(comm[1])) {
+                Bot.commands.file('tabungan').execute(message,comm[1],conn)
             } else {
-                const accountId=comm[1]
-                if(isMentioning(accountId)) {
-                    const query=`SELECT * FROM ${table.currency} WHERE discord_id='${accountId.replace("!","")}'`
-                    conn.query(query, (err,res,fields) => {
-                        if(err) throw err;
-                        if(dataNotFound(res)) {
-                            sendMessage(`${accountId} belum membuka tabungan`)
-                        } else {
-                            const bal=res[0].balance
-                            sendMessage(`Jumlah tabungan ${accountId} adalah Rp${bal}`)
-                        }    
-                    })
-                } else {
-                    sendMessage("Format tagnya salah kawand")
-                }
+                message.reply("Mau siapa yang dicek ngab?")
             }
-        })
+        }
+        // conn.connect(err => {
+        //     if(err) throw err;
+
+        //     if(comm[1] === undefined) {
+        //         const query=`SELECT * FROM ${table.currency} WHERE discord_id='${user}'`;
+
+        //         conn.query(query, (err, res, fields) => {
+        //             if(err) throw err;
+        //             if(dataNotFound(res)) {
+        //                 sendMessage(`${user} belum membuka tabungan`)
+        //             } else {
+        //                 const bal=res[0].balance
+        //                 sendMessage(`Jumlah tabungan ${user} adalah Rp${bal}`)
+        //             }
+        //         })
+        //     } else {
+        //         const accountId=comm[1]
+        //         if(isMentioning(accountId)) {
+        //             const query=`SELECT * FROM ${table.currency} WHERE discord_id='${accountId.replace("!","")}'`
+        //             conn.query(query, (err,res,fields) => {
+        //                 if(err) throw err;
+        //                 if(dataNotFound(res)) {
+        //                     sendMessage(`${accountId} belum membuka tabungan`)
+        //                 } else {
+        //                     const bal=res[0].balance
+        //                     sendMessage(`Jumlah tabungan ${accountId} adalah Rp${bal}`)
+        //                 }    
+        //             })
+        //         } else {
+        //             sendMessage("Format tagnya salah kawand")
+        //         }
+        //     }
+        // })
     }
 
     if(comm[0] === "minta") {
-        deleteMessage(message, 300)
+        Bot.commands.get('beg').execute(message,user,comm[1])
+        // deleteMessage(message, 300)
 
-        if(comm[1] === undefined) {
-            sendMessage(`Help dong gais, ${user} butuh duit nih @everyone`)
-        } else {
-            const beg=comm[1]
+        // if(comm[1] === undefined) {
+        //     sendMessage(`Help dong gais, ${user} butuh duit nih @everyone`)
+        // } else {
+        //     const beg=comm[1]
 
-            if(isMentioning(beg)) {
-                sendMessage(`Halo ${beg}, ${user} minta duit dari mu :)`)
-            } else {
-                sendMessage(`Minta sama siapa kawan? ${user}`)
-            }
-        }
+        //     if(isMentioning(beg)) {
+        //         sendMessage(`Halo ${beg}, ${user} minta duit dari mu :)`)
+        //     } else {
+        //         sendMessage(`Minta sama siapa kawan? ${user}`)
+        //     }
+        // }
     }
 
     if(comm[0] === "kasih") {
@@ -443,80 +404,99 @@ Bot.on('message', message => {
     }
 
     if(comm[0] === "tugas") {
-        // Functions for tugas
-        const wrongDateFormat = (day,month,year) => (
-            (day < 0 || day > 31)
-            ||
-            (month < 0 || month > 12)
-            ||
-            (year < 0 || year > 9999)
-        )
-        
-        conn.connect(err => {
-            if(err) throw err;
-            
-            if(comm[1] === "tambah") {
-                const date=comm[4]
-                const dateArray=date.split("-")
-                const tugas={
+        if(comm[1]==="tambah") {
+            if(comm[2] === undefined || comm[3] === undefined || comm[4] === undefined || comm[5] === undefined) {
+                message.channel.send('Format tambah tugas salah!')
+                message.channel.send('Command: -tugas tambah {judul} {matkul} {deadline} {kelas}')
+            } else {
+                const data={
                     judul: comm[2],
                     matkul: comm[3],
-                    deadline: {
-                        year: dateArray[0],
-                        month: dateArray[1],
-                        day: dateArray[2]
-                    }
+                    deadline: comm[4],
+                    kelas: comm[5]
                 }
-
-                // Add a validation function for each of the atributes
-                console.log(wrongDateFormat(tugas.deadline.day, tugas.deadline.month, tugas.deadline.year))
-
-                // const query=`INSERT INTO ${table.tugas} VALUES ('${tugas.judul}','${tugas.matkul}','${tugas.deadline}')`
-
-                // conn.query(query, (err,res) => {
-                //     if(err) throw err;
-                // })
+                Bot.commands.get('add_tugas').execute(message,conn,data)
             }
+        }
 
-            if(comm[1] === "list") {
-                const query=`SELECT * FROM ${table.tugas}`
-                conn.query(query, (err,res,fields) => {
-                    if(err) throw err;
+        if(comm[1]==="list") {
+            Bot.commands.get('list_tugas').execute(message,conn,Discord)
+        }
 
-                    res.foreach(rs => {
-                        // Print respond
-                        sendMessage(`Judul: ${rs.nama_tugas}\nMata Kuliah: ${rs.matkul}\nDeadline: ${rs.deadline}`)
-                    })
-                })
-            }
+        // Functions for tugas
+        // const wrongDateFormat = (day,month,year) => (
+        //     (day < 0 || day > 31)
+        //     ||
+        //     (month < 0 || month > 12)
+        //     ||
+        //     (year < 0 || year > 9999)
+        // )
+        
+        // conn.connect(err => {
+        //     if(err) throw err;
+            
+        //     if(comm[1] === "tambah") {
+        //         const date=comm[4]
+        //         const dateArray=date.split("-")
+        //         const tugas={
+        //             judul: comm[2],
+        //             matkul: comm[3],
+        //             deadline: {
+        //                 year: dateArray[0],
+        //                 month: dateArray[1],
+        //                 day: dateArray[2]
+        //             }
+        //         }
 
-            if(comm[1] === "search") {
-                if(comm[2] === "judul") {
-                    const judul=comm[3]
-                    const query=`SELECT * FROM ${table.tugas} WHERE judul='${judul}';`
-                    conn.query(query, (err,res,fields) => {
-                        if(err) throw err;
+        //         // Add a validation function for each of the atributes
+        //         console.log(wrongDateFormat(tugas.deadline.day, tugas.deadline.month, tugas.deadline.year))
 
-                        res.foreach(rs => {
-                            // Print respond
-                            sendMessage(`Judul: ${rs.nama_tugas}\nMata Kuliah: ${rs.matkul}\nDeadline: ${rs.deadline}`)
-                        })
-                    })
-                }
-                if(comm[2] === "matkul") {
-                    const matkul=comm[3]
-                    const query=`SELECT * FROM ${table.tugas} WHERE matkul='${matkul}';`
-                    conn.query(query, (err,res,fields) => {
-                        if(err) throw err;
+        //         // const query=`INSERT INTO ${table.tugas} VALUES ('${tugas.judul}','${tugas.matkul}','${tugas.deadline}')`
 
-                        res.foreach(rs => {
-                            // Print respond
-                            sendMessage(`Judul: ${rs.nama_tugas}\nMata Kuliah: ${rs.matkul}\nDeadline: ${rs.deadline}`)
-                        })
-                    })
-                }
-            }
-        })
+        //         // conn.query(query, (err,res) => {
+        //         //     if(err) throw err;
+        //         // })
+        //     }
+
+        //     if(comm[1] === "list") {
+        //         const query=`SELECT * FROM ${table.tugas}`
+        //         conn.query(query, (err,res,fields) => {
+        //             if(err) throw err;
+
+        //             res.foreach(rs => {
+        //                 // Print respond
+        //                 sendMessage(`Judul: ${rs.nama_tugas}\nMata Kuliah: ${rs.matkul}\nDeadline: ${rs.deadline}`)
+        //             })
+        //         })
+        //     }
+
+        //     if(comm[1] === "search") {
+        //         if(comm[2] === "judul") {
+        //             const judul=comm[3]
+        //             const query=`SELECT * FROM ${table.tugas} WHERE judul='${judul}';`
+        //             conn.query(query, (err,res,fields) => {
+        //                 if(err) throw err;
+
+        //                 res.foreach(rs => {
+        //                     // Print respond
+        //                     sendMessage(`Judul: ${rs.nama_tugas}\nMata Kuliah: ${rs.matkul}\nDeadline: ${rs.deadline}`)
+        //                 })
+        //             })
+        //         }
+        //         if(comm[2] === "matkul") {
+        //             const matkul=comm[3]
+        //             const query=`SELECT * FROM ${table.tugas} WHERE matkul='${matkul}';`
+        //             conn.query(query, (err,res,fields) => {
+        //                 if(err) throw err;
+
+        //                 res.foreach(rs => {
+        //                     // Print respond
+        //                     sendMessage(`Judul: ${rs.nama_tugas}\nMata Kuliah: ${rs.matkul}\nDeadline: ${rs.deadline}`)
+        //                 })
+        //             })
+        //         }
+        //     }
+        // })
     }
 });
 
