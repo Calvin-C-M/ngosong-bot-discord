@@ -1,7 +1,7 @@
 module.exports={
     name: "tabungan",
     desc: "Get currency information",
-    execute(message,target,connection,tables) {
+    execute(message,target,connection) {
         connection.connect(err => {
             if(err) throw err
             const query=`SELECT * FROM currency WHERE discord_id=${target}`
