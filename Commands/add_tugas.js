@@ -2,14 +2,22 @@ module.exports={
     name: "add_tugas",
     desc: "Insert tugas data to database",
     execute(message,connection,data) {
-        setTimeout(() => message.delete(), 500) 
+        setTimeout(() => message.delete(), 500)
 
-        const query=`INSERT INTO tugas (judul,matkul,deadline,kelas) VALUES ('${data.judul}', '${data.matkul}', '${data.deadline}', '${data.kelas}')`
+        const datePattern=/[0-9]{4}-[0-9]{2}-[0-9]{2}/
 
-        connection.query(query, (err,res) => {
-            if(err) throw err
+        if(datePattern.test(data.deadline)) {
+            const query=`INSERT INTO tugas (judul,matkul,deadline,kelas) VALUES ('${data.judul}', '${data.matkul}', '${data.deadline}', '${data.kelas}')`
 
-            message.channel.send('Data tugas berhasil disimpan!')
-        })
+            connection.query(query, (err,res) => {
+                if(err) throw err
+    
+                message.channel.send('Data tugas berhasil disimpan!')
+            })    
+        } else {
+            message.channel.send('Format deadline salah!')
+            message.channel.send('Format deadline: yyyy-mm-dd')
+        }
+
     }
 }

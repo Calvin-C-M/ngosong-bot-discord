@@ -92,6 +92,7 @@ Bot.on('message', message => {
         } else if(comm[1] === "b" || comm[1] === "B" || comm[1] === "kelas_b") {
             Bot.commands.get('jadwal_kelas_b').execute(message, args, Discord, conn)
         } else {
+            message.reply('Kelas mana yang mau dicek?')
             // Bot.commands.get('jadwal_kelas_a').execute(message, args, Discord, conn)
             // Bot.commands.get('jadwal_kelas_b').execute(message, args, Discord, conn)
         }
@@ -422,82 +423,7 @@ Bot.on('message', message => {
         if(comm[1]==="list") {
             Bot.commands.get('list_tugas').execute(message,conn,Discord)
         }
-
-        // Functions for tugas
-        // const wrongDateFormat = (day,month,year) => (
-        //     (day < 0 || day > 31)
-        //     ||
-        //     (month < 0 || month > 12)
-        //     ||
-        //     (year < 0 || year > 9999)
-        // )
-        
-        // conn.connect(err => {
-        //     if(err) throw err;
-            
-        //     if(comm[1] === "tambah") {
-        //         const date=comm[4]
-        //         const dateArray=date.split("-")
-        //         const tugas={
-        //             judul: comm[2],
-        //             matkul: comm[3],
-        //             deadline: {
-        //                 year: dateArray[0],
-        //                 month: dateArray[1],
-        //                 day: dateArray[2]
-        //             }
-        //         }
-
-        //         // Add a validation function for each of the atributes
-        //         console.log(wrongDateFormat(tugas.deadline.day, tugas.deadline.month, tugas.deadline.year))
-
-        //         // const query=`INSERT INTO ${table.tugas} VALUES ('${tugas.judul}','${tugas.matkul}','${tugas.deadline}')`
-
-        //         // conn.query(query, (err,res) => {
-        //         //     if(err) throw err;
-        //         // })
-        //     }
-
-        //     if(comm[1] === "list") {
-        //         const query=`SELECT * FROM ${table.tugas}`
-        //         conn.query(query, (err,res,fields) => {
-        //             if(err) throw err;
-
-        //             res.foreach(rs => {
-        //                 // Print respond
-        //                 sendMessage(`Judul: ${rs.nama_tugas}\nMata Kuliah: ${rs.matkul}\nDeadline: ${rs.deadline}`)
-        //             })
-        //         })
-        //     }
-
-        //     if(comm[1] === "search") {
-        //         if(comm[2] === "judul") {
-        //             const judul=comm[3]
-        //             const query=`SELECT * FROM ${table.tugas} WHERE judul='${judul}';`
-        //             conn.query(query, (err,res,fields) => {
-        //                 if(err) throw err;
-
-        //                 res.foreach(rs => {
-        //                     // Print respond
-        //                     sendMessage(`Judul: ${rs.nama_tugas}\nMata Kuliah: ${rs.matkul}\nDeadline: ${rs.deadline}`)
-        //                 })
-        //             })
-        //         }
-        //         if(comm[2] === "matkul") {
-        //             const matkul=comm[3]
-        //             const query=`SELECT * FROM ${table.tugas} WHERE matkul='${matkul}';`
-        //             conn.query(query, (err,res,fields) => {
-        //                 if(err) throw err;
-
-        //                 res.foreach(rs => {
-        //                     // Print respond
-        //                     sendMessage(`Judul: ${rs.nama_tugas}\nMata Kuliah: ${rs.matkul}\nDeadline: ${rs.deadline}`)
-        //                 })
-        //             })
-        //         }
-        //     }
-        // })
     }
 });
 
-Bot.login(token); // Change each time
+Bot.login(token);
