@@ -4,7 +4,7 @@ module.exports={
     execute(message,connection,data) {
         setTimeout(() => message.delete(), 500)
 
-        const datePattern=/[0-9]{4}-[0-9]{2}-[0-9]{2}/
+        const datePattern=/\d{4}-\d{2}-\d{2}/
 
         if(datePattern.test(data.deadline)) {
             const query=`INSERT INTO tugas (judul,matkul,deadline,kelas) VALUES ('${data.judul}', '${data.matkul}', '${data.deadline}', '${data.kelas}')`
