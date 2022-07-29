@@ -3,7 +3,7 @@ const tugasModel=require('../models/tugasSchema')
 module.exports={
     name: "add_tugas",
     desc: "Insert tugas data to database",
-    execute(message,connection,data) {
+    execute(message,data) {
         setTimeout(() => message.delete(), 500)
 
         const datePattern=/\d{4}-\d{2}-\d{2}/
