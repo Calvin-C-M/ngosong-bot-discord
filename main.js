@@ -5,6 +5,7 @@ const Discord = require('discord.js')
 const Bot = new Discord.Client()
 const prefix = "-"
 const fs = require('fs')
+const mongoose = require('mongoose')
 const mysql = require('mysql')
 const workRecently=new Set()
 const dailyRecently=new Set()
@@ -425,5 +426,15 @@ Bot.on('message', message => {
         }
     }
 });
+
+mongoose.connect(process.env.MONGODB_SRV, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+}).then(() => {
+    console.log('Connected to the database!')
+}).catch(err => {
+    console.log(err)
+})
 
 Bot.login(token);
