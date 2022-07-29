@@ -417,12 +417,12 @@ Bot.on('message', message => {
                     deadline: comm[4],
                     kelas: comm[5]
                 }
-                Bot.commands.get('add_tugas').execute(message,conn,data)
+                Bot.commands.get('add_tugas').execute(message,data)
             }
         }
 
         if(comm[1]==="list") {
-            Bot.commands.get('list_tugas').execute(message,conn,Discord)
+            Bot.commands.get('list_tugas').execute(message)
         }
     }
 });

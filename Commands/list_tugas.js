@@ -1,7 +1,14 @@
+const tugasModel=require('../models/tugasModel')
+const Discord=require('discord.js')
+
+const listTugas=new Discord.MessageEmbed()
+.setColor("#304281")
+.setTitle("Daftar Tugas")
+
 module.exports={
     name: "list_tugas",
     desc: "Give list of tugas from database",
-    execute(message,connection,Discord) {
+    async execute(message) {
         const today={
             day: new Date().getDay(),
             month: new Date().getMonth(),
@@ -11,22 +18,18 @@ module.exports={
             }
         }
 
-        const query=`SELECT * FROM tugas WHERE deadline > '${today.toString()}'`
-        connection.query(query, (err,res,fields) => {
-            if(err) throw err
-
-            const listTugas=new Discord.MessageEmbed()
-            .setColor("#304281")
-            .setTitle("Daftar Tugas")
-
-            res.filter(data => {
-                listTugas.addFields({ 
-                    name: `${data.judul}`,
-                    value: `${data.matkul} - ${data.deadline.toString().substring(0,15)} - ${data.kelas}`
-                })
-            })
-
-            message.channel.send(listTugas)
-        })
+        const tugasData = await tugasModel.find({})
+                        .then(tugasData => {
+                            tugasData.filter(tugas => {
+                                listTugas.addFields({
+                                    name: `${tugas.judul}`,
+                                    value: `${tugas.matkul} - ${tugas.deadline.toString().substring(0,15)} - ${tugas.kelas}`
+                                })
+                            })
+                            
+                            message.channel.send(listTugas)
+                        }).catch(err => {
+                            console.log(err)
+                        })
     }
 }
