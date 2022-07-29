@@ -1,4 +1,4 @@
-const tugasModel=require('../models/tugasSchema')
+const tugasModel=require('../models/tugasModel')
 
 module.exports={
     name: "add_tugas",
