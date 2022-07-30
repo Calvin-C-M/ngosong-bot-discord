@@ -9,16 +9,8 @@ module.exports={
     name: "list_tugas",
     desc: "Give list of tugas from database",
     async execute(message) {
-        const today={
-            day: new Date().getDay(),
-            month: new Date().getMonth(),
-            year: new Date().getFullYear(),
-            toString() {
-                return `${this.year}-${this.month}-${this.day}`
-            }
-        }
-
-        const tugasData = await tugasModel.find({})
+        const today=new Date()
+        const tugasData = await tugasModel.find({ deadline: { $gte: today } })
                         .then(tugasData => {
                             tugasData.filter(tugas => {
                                 listTugas.addFields({
@@ -30,6 +22,7 @@ module.exports={
                             message.channel.send(listTugas)
                         }).catch(err => {
                             console.log(err)
+                            message.channel.send("(!) Ada kesalahan pada database, silahkan kontak maintainer")
                         })
     }
 }
