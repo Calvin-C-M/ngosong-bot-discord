@@ -433,16 +433,17 @@ Bot.on('message', message => {
 
     if(comm[0] === "tugas") {
         if(comm[1]==="tambah") {
-            if(comm[2] === undefined || comm[3] === undefined || comm[4] === undefined || comm[5] === undefined) {
+            const data={
+                judul: comm[2],
+                matkul: comm[3],
+                deadline: comm[4],
+                kelas: comm[5]
+            }
+            
+            if(hasEmptyData(data)) {
                 message.channel.send('Format tambah tugas salah!')
                 message.channel.send(`Command: ${prefix}tugas tambah {judul} {matkul} {deadline} {kelas}`)
             } else {
-                const data={
-                    judul: comm[2],
-                    matkul: comm[3],
-                    deadline: comm[4],
-                    kelas: comm[5]
-                }
                 Bot.commands.get('add_tugas').execute(message,data)
             }
         }
