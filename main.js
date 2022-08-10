@@ -9,7 +9,7 @@ const mongoose = require('mongoose')
 const mysql = require('mysql')
 const workRecently=new Set()
 const dailyRecently=new Set()
-const token=process.env.TOKEN;
+const token=process.env.DISCORD_TOKEN;
 
 Bot.commands = new Discord.Collection(); // Initialize the Bot's Command
 
@@ -57,6 +57,14 @@ Bot.on('message', message => {
     const isMentioning = require('./functions/isMentioning')
     const getJSONFile = require('./functions/getJsonFile')
     const deleteMessage = (msg,time) => setTimeout(() => msg.delete(), time) // Deleting the command message
+    const hasEmptyData = (data) => {
+        let empty=false
+        for(let d of Object.values(data)) {
+            empty = (d === undefined)
+            if(empty) break
+        }
+        return empty
+    }
 
     // Commands
     if(command==='help') {
@@ -88,15 +96,33 @@ Bot.on('message', message => {
     }
 
     if(comm[0] === 'jadwal') {
-        if(comm[1] === "a" || comm[1] === "A" || comm[1] === "kelas_a") {
-            Bot.commands.get('jadwal_kelas_a').execute(message, args, Discord, conn)
-        } else if(comm[1] === "b" || comm[1] === "B" || comm[1] === "kelas_b") {
-            Bot.commands.get('jadwal_kelas_b').execute(message, args, Discord, conn)
-        } else {
-            message.reply('Kelas mana yang mau dicek?')
-            // Bot.commands.get('jadwal_kelas_a').execute(message, args, Discord, conn)
-            // Bot.commands.get('jadwal_kelas_b').execute(message, args, Discord, conn)
+
+        // Add jadwal command: ${prefix}jadwal tambah ${matkul} ${hari} ${jam} ${kelas} ${semester}
+
+        switch(comm[1]) {
+            case 'tambah':
+                const newData={
+                    matkul: comm[2],
+                    hari: comm[3],
+                    jam: comm[4],
+                    kelas: comm[5],
+                    semester: comm[6]
+                }
+                if(hasEmptyData(newData)) {
+                    message.channel.send("Format command salah!")
+                    message.channel.send(`\`\`\`Command: ${prefix}jadwal tambah matkul hari jam kelas semester\nContoh: ${prefix}jadwal tambah Alprog Senin 08.30-10.30 a 1\`\`\` `)
+                } else {
+                    Bot.commands.get('add_jadwal').execute(message,newData)
+                }
+                break;
+
+            default: 
+                message.channel.send('Ada kesalahan dalam melakukan command')
+                break;
         }
+
+        // if(comm[1] === 'tambah') {
+        // }
     }
 
     if(comm[0] === "tebak") {
@@ -409,7 +435,7 @@ Bot.on('message', message => {
         if(comm[1]==="tambah") {
             if(comm[2] === undefined || comm[3] === undefined || comm[4] === undefined || comm[5] === undefined) {
                 message.channel.send('Format tambah tugas salah!')
-                message.channel.send('Command: -tugas tambah {judul} {matkul} {deadline} {kelas}')
+                message.channel.send(`Command: ${prefix}tugas tambah {judul} {matkul} {deadline} {kelas}`)
             } else {
                 const data={
                     judul: comm[2],
