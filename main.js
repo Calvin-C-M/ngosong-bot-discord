@@ -120,9 +120,6 @@ Bot.on('message', message => {
                 message.channel.send('Ada kesalahan dalam melakukan command')
                 break;
         }
-
-        // if(comm[1] === 'tambah') {
-        // }
     }
 
     if(comm[0] === "tebak") {
