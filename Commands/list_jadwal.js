@@ -1,7 +1,7 @@
 const jadwalModel = require('../models/jadwalModel')
 const Discord = require('discord.js')
 
-const CURRENT_SEMESTER=3
+const CURRENT_SEMESTER=5
 
 const listJadwal=new Discord.MessageEmbed()
 .setColor("#304281")
