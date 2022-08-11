@@ -10,6 +10,7 @@ const mysql = require('mysql')
 const workRecently=new Set()
 const dailyRecently=new Set()
 const token=process.env.DISCORD_TOKEN;
+const CLASSES=/(a|b)/i
 
 Bot.commands = new Discord.Collection(); // Initialize the Bot's Command
 
@@ -117,7 +118,11 @@ Bot.on('message', message => {
                 break;
 
             case 'list':
-                Bot.commands.get('list_jadwal').execute(message,'a')
+                if(CLASSES.test(comm[2])) {
+                    Bot.commands.get('list_jadwal').execute(message,comm[2])
+                } else {
+                    message.reply("kelas yang mana ngab?")
+                }
                 break;
 
             default: 

@@ -13,7 +13,7 @@ module.exports = {
     async execute(message,kelas) {
         listJadwal.setTitle(`Jadwal Kelas ${kelas}`)
 
-        await jadwalModel.find({ semester: CURRENT_SEMESTER })
+        await jadwalModel.find({ semester: CURRENT_SEMESTER, kelas: `${kelas}` })
         .then(jadwalData => {
             const jadwalFields=[
                 {hari: "Senin", value: ""}, {hari: "Selasa", value: ""}, {hari: "Rabu", value: ""},
