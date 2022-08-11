@@ -7,18 +7,21 @@ const listJadwal=new Discord.MessageEmbed()
 .setColor("#304281")
 .setTitle("Jadwal Kelas")
 
+const jadwalFields=[
+    {hari: "Senin", value: ""}, {hari: "Selasa", value: ""}, {hari: "Rabu", value: ""},
+    {hari: "Kamis", value: ""}, {hari: "Jumat", value: ""}
+]
+
 module.exports = {
     name: "list_jadwal",
     description: "Jadwal Mata Kuliah",
     async execute(message,kelas) {
         listJadwal.setTitle(`Jadwal Kelas ${kelas}`)
+        listJadwal.fields=[]
+        jadwalFields.map(jadwal => jadwal.value="")
 
         await jadwalModel.find({ semester: CURRENT_SEMESTER, kelas: `${kelas}` })
         .then(jadwalData => {
-            const jadwalFields=[
-                {hari: "Senin", value: ""}, {hari: "Selasa", value: ""}, {hari: "Rabu", value: ""},
-                {hari: "Kamis", value: ""}, {hari: "Jumat", value: ""}
-            ]
 
             jadwalData.filter(jadwal => {
                 const indexData=jadwalFields.map(field => field.hari).indexOf(jadwal.hari)
