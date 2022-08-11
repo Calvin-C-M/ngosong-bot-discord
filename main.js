@@ -116,6 +116,10 @@ Bot.on('message', message => {
                 }
                 break;
 
+            case 'list':
+                Bot.commands.get('list_jadwal').execute(message,'a')
+                break;
+
             default: 
                 message.channel.send('Ada kesalahan dalam melakukan command')
                 break;
