@@ -57,6 +57,7 @@ Bot.on('message', message => {
     const sendMessage = (text) => message.channel.send(text) // Sends message to the Discord
     const isMentioning = require('./functions/isMentioning')
     const getJSONFile = require('./functions/getJsonFile')
+    const capitalizeFirstLetter = require('./functions/capitalizeFirstLetter')
     const deleteMessage = (msg,time) => setTimeout(() => msg.delete(), time) // Deleting the command message
     const hasEmptyData = (data) => {
         let empty=false
@@ -103,10 +104,10 @@ Bot.on('message', message => {
         switch(comm[1]) {
             case 'tambah':
                 const newData={
-                    matkul: comm[2],
-                    hari: comm[3],
+                    matkul: capitalizeFirstLetter(comm[2]),
+                    hari: capitalizeFirstLetter(comm[3]),
                     jam: comm[4],
-                    kelas: comm[5],
+                    kelas: capitalizeFirstLetter(comm[5]),
                     semester: comm[6]
                 }
                 if(hasEmptyData(newData)) {
@@ -119,7 +120,8 @@ Bot.on('message', message => {
 
             case 'list':
                 if(CLASSES.test(comm[2])) {
-                    Bot.commands.get('list_jadwal').execute(message,comm[2])
+                    const kelas=capitalizeFirstLetter(comm[2])
+                    Bot.commands.get('list_jadwal').execute(message,kelas)
                 } else {
                     message.reply("kelas yang mana ngab?")
                 }
