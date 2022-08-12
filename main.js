@@ -5,10 +5,12 @@ const Discord = require('discord.js')
 const Bot = new Discord.Client()
 const prefix = "-"
 const fs = require('fs')
+const mongoose = require('mongoose')
 const mysql = require('mysql')
 const workRecently=new Set()
 const dailyRecently=new Set()
-const token=process.env.TOKEN;
+const token=process.env.DISCORD_TOKEN;
+const CLASSES=/(a|b)/i
 
 Bot.commands = new Discord.Collection(); // Initialize the Bot's Command
 
@@ -55,7 +57,16 @@ Bot.on('message', message => {
     const sendMessage = (text) => message.channel.send(text) // Sends message to the Discord
     const isMentioning = require('./functions/isMentioning')
     const getJSONFile = require('./functions/getJsonFile')
+    const capitalizeFirstLetter = require('./functions/capitalizeFirstLetter')
     const deleteMessage = (msg,time) => setTimeout(() => msg.delete(), time) // Deleting the command message
+    const hasEmptyData = (data) => {
+        let empty=false
+        for(let d of Object.values(data)) {
+            empty = (d === undefined)
+            if(empty) break
+        }
+        return empty
+    }
 
     // Commands
     if(command==='help') {
@@ -87,14 +98,38 @@ Bot.on('message', message => {
     }
 
     if(comm[0] === 'jadwal') {
-        if(comm[1] === "a" || comm[1] === "A" || comm[1] === "kelas_a") {
-            Bot.commands.get('jadwal_kelas_a').execute(message, args, Discord, conn)
-        } else if(comm[1] === "b" || comm[1] === "B" || comm[1] === "kelas_b") {
-            Bot.commands.get('jadwal_kelas_b').execute(message, args, Discord, conn)
-        } else {
-            message.reply('Kelas mana yang mau dicek?')
-            // Bot.commands.get('jadwal_kelas_a').execute(message, args, Discord, conn)
-            // Bot.commands.get('jadwal_kelas_b').execute(message, args, Discord, conn)
+
+        // Add jadwal command: ${prefix}jadwal tambah ${matkul} ${hari} ${jam} ${kelas} ${semester}
+
+        switch(comm[1]) {
+            case 'tambah':
+                const newData={
+                    matkul: capitalizeFirstLetter(comm[2]),
+                    hari: capitalizeFirstLetter(comm[3]),
+                    jam: comm[4],
+                    kelas: capitalizeFirstLetter(comm[5]),
+                    semester: comm[6]
+                }
+                if(hasEmptyData(newData)) {
+                    message.channel.send("Format command salah!")
+                    message.channel.send(`\`\`\`Command: ${prefix}jadwal tambah matkul hari jam kelas semester\nContoh: ${prefix}jadwal tambah Alprog Senin 08.30-10.30 a 1\`\`\` `)
+                } else {
+                    Bot.commands.get('add_jadwal').execute(message,newData)
+                }
+                break;
+
+            case 'list':
+                if(CLASSES.test(comm[2])) {
+                    const kelas=capitalizeFirstLetter(comm[2])
+                    Bot.commands.get('list_jadwal').execute(message,kelas)
+                } else {
+                    message.reply("kelas yang mana ngab?")
+                }
+                break;
+
+            default: 
+                message.channel.send('Ada kesalahan dalam melakukan command')
+                break;
         }
     }
 
@@ -406,24 +441,35 @@ Bot.on('message', message => {
 
     if(comm[0] === "tugas") {
         if(comm[1]==="tambah") {
-            if(comm[2] === undefined || comm[3] === undefined || comm[4] === undefined || comm[5] === undefined) {
+            const data={
+                judul: comm[2],
+                matkul: comm[3],
+                deadline: comm[4],
+                kelas: comm[5]
+            }
+            
+            if(hasEmptyData(data)) {
                 message.channel.send('Format tambah tugas salah!')
-                message.channel.send('Command: -tugas tambah {judul} {matkul} {deadline} {kelas}')
+                message.channel.send(`Command: ${prefix}tugas tambah {judul} {matkul} {deadline} {kelas}`)
             } else {
-                const data={
-                    judul: comm[2],
-                    matkul: comm[3],
-                    deadline: comm[4],
-                    kelas: comm[5]
-                }
-                Bot.commands.get('add_tugas').execute(message,conn,data)
+                Bot.commands.get('add_tugas').execute(message,data)
             }
         }
 
         if(comm[1]==="list") {
-            Bot.commands.get('list_tugas').execute(message,conn,Discord)
+            Bot.commands.get('list_tugas').execute(message)
         }
     }
 });
+
+mongoose.connect(process.env.MONGODB_SRV, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+}).then(() => {
+    console.log('Connected to the database!')
+}).catch(err => {
+    console.log(err)
+})
 
 Bot.login(token);
