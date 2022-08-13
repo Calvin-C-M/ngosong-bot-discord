@@ -136,7 +136,7 @@ Bot.on('message', message => {
     
     if(comm[0] === "tugas") {
         // Add tugas command:  ${prefix}tugas tambah ${judul} ${matkul} ${deadline} ${kelas}
-        
+
         if(comm[1]==="tambah") {
             const data={
                 judul: comm[2],
@@ -255,7 +255,15 @@ Bot.on('message', message => {
     // ================= WORK COMMANDS ====================
 
     if(comm[0] === "tabungan") {
+        if(comm[1] === undefined || comm[1] === null || !isMentioning(comm[1])) {
+            Bot.commands.get('tabungan').execute(message,user)
+        } else {
+            Bot.commands.get('tabungan').execute(message,comm[1])
+        }
+    }
 
+    if(command === "kerja") {
+        Bot.commands.get('kerja').execute(message,user,workRecently)
     }
 
     if(comm[0] === "minta") {
@@ -269,16 +277,13 @@ Bot.on('message', message => {
     if(command === "daily") {
 
     }
-
-    if(command === "kerja") {
-        
-    }
 });
 
 mongoose.connect(process.env.MONGODB_SRV, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useCreateIndex: true
 }).then(() => {
     console.log('Connected to the database!')
 }).catch(err => {

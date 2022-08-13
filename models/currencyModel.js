@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const schema = mongoose.Schema({
-    id: { type: String, require: true, unique: true },
+    discord_id: { type: String, require: true, unique: true },
     balance: { type: Number, require: true }
 })
 
