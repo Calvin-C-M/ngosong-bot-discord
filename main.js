@@ -271,7 +271,7 @@ Bot.on('message', message => {
     }
 
     if(comm[0] === "kasih") {
-
+        Bot.commands.get('give_money').execute(message,user,comm[1],comm[2])
     }
 
     if(command === "daily") {
