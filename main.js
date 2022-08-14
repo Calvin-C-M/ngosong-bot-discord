@@ -267,7 +267,7 @@ Bot.on('message', message => {
     }
 
     if(comm[0] === "minta") {
-
+        Bot.commands.get('beg').execute(message,user,comm[1])
     }
 
     if(comm[0] === "kasih") {
