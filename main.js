@@ -275,7 +275,11 @@ Bot.on('message', message => {
     }
 
     if(command === "daily") {
-
+        Bot.commands.get('daily').execute(message,user,dailyRecently)
+    }
+    
+    if(command === "test") {
+        Bot.commands.get('test').execute(message)
     }
 });
 
