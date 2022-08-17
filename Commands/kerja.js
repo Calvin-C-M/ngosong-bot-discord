@@ -3,12 +3,6 @@ const currencyModel=require('../models/currencyModel')
 const EARLY_WAGE=1000
 const MAX_WAGE=500
 
-const saveShiftSet = (shift_set,user) => {
-    const COOLDOWN=60 // In minutes
-    shift_set.add(user)
-    setTimeout(() => shift_set.delete(user), COOLDOWN*1000*60)
-}
-
 module.exports={
     name: "kerja",
     description: "Doing work for 1 hour",
@@ -24,7 +18,9 @@ module.exports={
                         currencyModel.updateOne({ discord_id: user},{ balance: newBalance })
                         .then(() => {
                             message.reply(`anda mendapatkan gaji sebesar ${wage}`)
-                            saveShiftSet(shift_set,user)
+                            const COOLDOWN=60 // In minutes
+                            shift_set.add(user)
+                            setTimeout(() => shift_set.delete(user), COOLDOWN*1000*60)
                         })
                         .catch(err => {
                             console.log(err)
