@@ -1,22 +1,21 @@
+const currencyModel=require("../models/currencyModel")
+
 module.exports={
     name: "tabungan",
     desc: "Get currency information",
-    execute(message,target,connection) {
-        connection.connect(err => {
-            if(err) throw err
-            const query=`SELECT * FROM currency WHERE discord_id=${target}`
-
-            connection.query(query, (err,res,field) => {
-                if(err) throw err
-
-                // If data cannot be found
-                if(res.length <= 0) {
-                    message.channel.send(`${target} belum membuat akun`)
+    async execute(message,target) {
+        setTimeout(() => message.delete(),300)
+        await currencyModel.findOne({ discord_id: target })
+            .then(data => {
+                if(data) {
+                    message.channel.send(`${target} memiliki tabungan ${data.balance}`)
                 } else {
-                    const balance=res[0].balance
-                    message.channel.send(`Jumlah tabungan ${target} adalah ${balance}`)
+                    message.channel.send(`${target} belum punya tabungan`)
                 }
             })
-        })
+            .catch(err => {
+                console.log(err)
+                message.channel.send('(!) Mohon maaf ada kesalahan, silahkan kontak maintainer')
+            })
     }
 }

@@ -68,17 +68,13 @@ Bot.on('message', message => {
         return empty
     }
 
-    // Commands
+    // ==================== GENERAL COMMANDS =======================
     if(command==='help') {
         Bot.commands.get('help').execute(message,Discord)
     }
 
     if(command==='ping') {
         Bot.commands.get('ping').execute(message)
-    }
-
-    if(command==='link') {
-        Bot.commands.get('link_penting').execute(message,Discord)
     }
 
     if(command==='hadir') {
@@ -97,8 +93,13 @@ Bot.on('message', message => {
         Bot.commands.get('santet').execute(message,comm[1])
     }
 
-    if(comm[0] === 'jadwal') {
+    // ================ KULIAH COMMANDS ======================
+    
+    if(command==='link') {
+        Bot.commands.get('link_penting').execute(message,Discord)
+    }
 
+    if(comm[0] === 'jadwal') {
         // Add jadwal command: ${prefix}jadwal tambah ${matkul} ${hari} ${jam} ${kelas} ${semester}
 
         switch(comm[1]) {
@@ -132,6 +133,32 @@ Bot.on('message', message => {
                 break;
         }
     }
+    
+    if(comm[0] === "tugas") {
+        // Add tugas command:  ${prefix}tugas tambah ${judul} ${matkul} ${deadline} ${kelas}
+
+        if(comm[1]==="tambah") {
+            const data={
+                judul: comm[2],
+                matkul: comm[3],
+                deadline: comm[4],
+                kelas: comm[5]
+            }
+            
+            if(hasEmptyData(data)) {
+                message.channel.send('Format tambah tugas salah!')
+                message.channel.send(`Command: ${prefix}tugas tambah {judul} {matkul} {deadline} {kelas}`)
+            } else {
+                Bot.commands.get('add_tugas').execute(message,data)
+            }
+        }
+
+        if(comm[1]==="list") {
+            Bot.commands.get('list_tugas').execute(message)
+        }
+    }
+
+    // =========================== GAME COMMANDS ===================================
 
     if(comm[0] === "tebak") {
         if(comm[1] === "angka") {
@@ -225,247 +252,42 @@ Bot.on('message', message => {
         }
     }
 
+    // ================= WORK COMMANDS ====================
+
     if(comm[0] === "tabungan") {
-        if(comm[1] === undefined || comm[1] === null) {
-            Bot.commands.file('tabungan').execute(message,user,conn)
+        if(comm[1] === undefined || comm[1] === null || !isMentioning(comm[1])) {
+            Bot.commands.get('tabungan').execute(message,user)
         } else {
-            if(isMentioning(comm[1])) {
-                Bot.commands.file('tabungan').execute(message,comm[1],conn)
-            } else {
-                message.reply("Mau siapa yang dicek ngab?")
-            }
-        }
-        // conn.connect(err => {
-        //     if(err) throw err;
-
-        //     if(comm[1] === undefined) {
-        //         const query=`SELECT * FROM ${table.currency} WHERE discord_id='${user}'`;
-
-        //         conn.query(query, (err, res, fields) => {
-        //             if(err) throw err;
-        //             if(dataNotFound(res)) {
-        //                 sendMessage(`${user} belum membuka tabungan`)
-        //             } else {
-        //                 const bal=res[0].balance
-        //                 sendMessage(`Jumlah tabungan ${user} adalah Rp${bal}`)
-        //             }
-        //         })
-        //     } else {
-        //         const accountId=comm[1]
-        //         if(isMentioning(accountId)) {
-        //             const query=`SELECT * FROM ${table.currency} WHERE discord_id='${accountId.replace("!","")}'`
-        //             conn.query(query, (err,res,fields) => {
-        //                 if(err) throw err;
-        //                 if(dataNotFound(res)) {
-        //                     sendMessage(`${accountId} belum membuka tabungan`)
-        //                 } else {
-        //                     const bal=res[0].balance
-        //                     sendMessage(`Jumlah tabungan ${accountId} adalah Rp${bal}`)
-        //                 }    
-        //             })
-        //         } else {
-        //             sendMessage("Format tagnya salah kawand")
-        //         }
-        //     }
-        // })
-    }
-
-    if(comm[0] === "minta") {
-        Bot.commands.get('beg').execute(message,user,comm[1])
-        // deleteMessage(message, 300)
-
-        // if(comm[1] === undefined) {
-        //     sendMessage(`Help dong gais, ${user} butuh duit nih @everyone`)
-        // } else {
-        //     const beg=comm[1]
-
-        //     if(isMentioning(beg)) {
-        //         sendMessage(`Halo ${beg}, ${user} minta duit dari mu :)`)
-        //     } else {
-        //         sendMessage(`Minta sama siapa kawan? ${user}`)
-        //     }
-        // }
-    }
-
-    if(comm[0] === "kasih") {
-        deleteMessage(message, 300)
-
-        const begger=comm[1]
-        const amount=comm[2]
-
-        if(isMentioning(begger)) {
-            conn.connect(err => {
-                if(err) throw err;
-
-                const query=`SELECT * FROM ${table.currency} WHERE discord_id='${user}';`
-
-                conn.query(query, (err,res,fields) => {
-                    if(err) throw err;
-
-                    const account={
-                        id: res[0].discord_id,
-                        balance: res[0].balance
-                    }
-
-                    account.balance -= amount
-
-                    if(account.balance < 0) {
-                        sendMessage("Maaf saldo anda tidak cukup :(")
-                        return
-                    } else {
-                        const getBeggerData=`SELECT * FROM ${table.currency} WHERE discord_id='';`
-                        
-                        // const updateGiverQuery=`UPDATE ${table.currency} SET balance='${account.balance}' WHERE discord_id='${account.id}';` // Update the giver's balance
-                        // conn.query(updateGiverQuery, (err,res) => {
-                        //     if(err) throw err;
-                        // })
-
-                        // const updateBeggerQuery=`UPDATE ${table.currency} SET balance='${amount}' WHERE discord_id='${begger.replace("!","")}';` // Update the begger's balance
-                        // conn.query(updateBeggerQuery, (err,res) => {
-                        //     if(err) throw err;
-                        // })
-
-                        sendMessage(`Yey, ${user} baru saja donasikan duit sebesar ${amount} ke ${begger}`)
-                    }
-                })
-            })
-        } else {
-            sendMessage("Mau ngirim ke siapa ngab?");
-        }
-    }
-
-    if(command === "daily") {
-
-        const cooldown=1000 * 60 * 60 * 24
-        // const currDate=new Date()
-
-        const dailyObject={
-            userDc:user,
-            date: new Date()
-        }
-
-        if(dailyRecently.has(dailyObject.userDc)) {
-            sendReply("Sudah mengambil daily reward hari ini")
-        } else {
-            conn.connect(err => {
-                if(err) throw err;
-    
-                const minReward=200
-                const maxReward=600
-        
-                const dailyReward=Math.floor(Math.random()*maxReward)+minReward
-        
-                const query=`SELECT * FROM ${table.currency} WHERE discord_id=${user}`    
-    
-                conn.query(query, (err, res, fields) => {
-                    if(err) throw err;
-    
-                    if(dataNotFound(res)) {
-                        const insertQuery=`INSERT INTO ${table.currency} VALUES ('${user}','${payment}');`
-                        conn.query(insertQuery, (err, res) => {
-                            if(err) throw err;
-                        })
-                    } else {
-                        let bal=res[0].balance
-                        bal += dailyReward
-        
-                        const updateQuery=`UPDATE ${table.currency} 
-                                        SET balance='${bal}' 
-                                        WHERE discord_id='${user}';`
-        
-                        conn.query(updateQuery, (err, res) => {
-                            if(err) throw err;    
-                        })
-                    }
-                    sendMessage(`${user} telah mengambil daily reward sebesar Rp${dailyReward}`)
-                })
-            })
-
-            dailyRecently.add(dailyObject.userDc)
-            setTimeout(() => {
-                dailyRecently.delete(dailyObject.userDc)
-            }, cooldown)
+            Bot.commands.get('tabungan').execute(message,comm[1])
         }
     }
 
     if(command === "kerja") {
-        deleteMessage(message,300)
-
-        const cooldown=60 // In minutes
-
-        if(workRecently.has(user)) {
-            sendReply(`Anda sudah ambil duit kurang dari sejam yang lalu`)
-        } else {
-            conn.connect(err => {
-                if(err) throw err;
-                
-                const minPayment=100
-                const maxPayment=500
-
-                const payment=Math.floor(Math.random()*maxPayment)+minPayment
-
-                const query=`SELECT * FROM ${table.currency} WHERE discord_id='${user}';`
-
-                conn.query(query, (err, res, fields) => {
-                    if(err) throw err;
-
-                    if(dataNotFound(res)) {
-                        const insertQuery=`INSERT INTO ${table.currency} VALUES ('${user}','${payment}');`
-                        conn.query(insertQuery, (err, res) => {
-                            if(err) throw err;
-                        })
-
-                    } else {
-                        let bal=res[0].balance
-                        bal += payment
-        
-                        const updateQuery=`UPDATE ${table.currency} 
-                                        SET balance='${bal}' 
-                                        WHERE discord_id='${user}';`
-        
-                        conn.query(updateQuery, (err, res) => {
-                            if(err) throw err;    
-                        })
-                    }
-
-                    sendMessage(`${user} memperoleh uang sebesar Rp${payment}`)                    
-                })
-            })
-
-            workRecently.add(user)
-            setTimeout(() => {
-                workRecently.delete(user)
-            }, cooldown * 1000 * 60);
-        }
+        Bot.commands.get('kerja').execute(message,user,workRecently)
     }
 
-    if(comm[0] === "tugas") {
-        if(comm[1]==="tambah") {
-            const data={
-                judul: comm[2],
-                matkul: comm[3],
-                deadline: comm[4],
-                kelas: comm[5]
-            }
-            
-            if(hasEmptyData(data)) {
-                message.channel.send('Format tambah tugas salah!')
-                message.channel.send(`Command: ${prefix}tugas tambah {judul} {matkul} {deadline} {kelas}`)
-            } else {
-                Bot.commands.get('add_tugas').execute(message,data)
-            }
-        }
+    if(comm[0] === "minta") {
+        Bot.commands.get('beg').execute(message,user,comm[1])
+    }
 
-        if(comm[1]==="list") {
-            Bot.commands.get('list_tugas').execute(message)
-        }
+    if(comm[0] === "kasih") {
+        Bot.commands.get('give_money').execute(message,user,comm[1],comm[2])
+    }
+
+    if(command === "daily") {
+        Bot.commands.get('daily').execute(message,user,dailyRecently)
+    }
+    
+    if(command === "test") {
+        Bot.commands.get('test').execute(message)
     }
 });
 
 mongoose.connect(process.env.MONGODB_SRV, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useCreateIndex: true
 }).then(() => {
     console.log('Connected to the database!')
 }).catch(err => {
