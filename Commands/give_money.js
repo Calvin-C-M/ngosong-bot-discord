@@ -26,7 +26,7 @@ module.exports={
                                             currencyModel.updateOne({ discord_id: target }, { balance: targetBalance })
                                             .then(() => {
                                                 setTimeout(() => message.delete(),300)
-                                                message.channel.send(`${user} mengirim ${target} uang sejumlah ${amount}`)
+                                                message.channel.send(`${user} mengirim ${target} uang sejumlah NR${amount}`)
                                             })
                                             .catch(err => {
                                                 console.log(err)

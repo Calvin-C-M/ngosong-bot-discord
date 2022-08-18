@@ -8,7 +8,7 @@ module.exports={
         await currencyModel.findOne({ discord_id: target })
             .then(data => {
                 if(data) {
-                    message.channel.send(`${target} memiliki tabungan ${data.balance}`)
+                    message.channel.send(`${target} memiliki tabungan NR${data.balance}`)
                 } else {
                     message.channel.send(`${target} belum punya tabungan`)
                 }

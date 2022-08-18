@@ -40,7 +40,7 @@ module.exports={
                         const newBalance=data.balance+wage
                         currencyModel.updateOne({ discord_id: user }, { balance: newBalance })
                         .then(() => {
-                            message.channel.send(`${user} melakukan daily dan mendapatkan duit sejumlah ${wage}`)
+                            message.channel.send(`${user} melakukan daily dan mendapatkan duit sejumlah NR${wage}`)
                             daily_set.add(user)
 
                             setTimeout(() => {
@@ -56,7 +56,7 @@ module.exports={
                             discord_id: user,
                             balance: EARLY_WAGE
                         }).then(() => {
-                            message.reply(`anda belum punya tabungan, jadi nih modal awal ${EARLY_WAGE}`)
+                            message.reply(`anda belum punya tabungan, jadi nih modal awal NR${EARLY_WAGE}`)
                         }).catch(err => {
                             console.log(err)
                             message.channel.send("(!) Ada kesalahan pada database, silahkan kontak maintainer")
