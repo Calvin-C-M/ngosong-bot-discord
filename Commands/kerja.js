@@ -1,7 +1,10 @@
 const currencyModel=require('../models/currencyModel')
 
-const EARLY_WAGE=1000
-const MAX_WAGE=500
+const reward={
+    EARLY: 1000,
+    MIN: 100,
+    MAX: 500
+}
 
 module.exports={
     name: "kerja",
@@ -13,7 +16,7 @@ module.exports={
             await currencyModel.findOne({ discord_id: user })
                 .then(data => {
                     if(data) {
-                        const wage=Math.round(Math.random()*MAX_WAGE)
+                        const wage=Math.round(Math.random()*reward.MAX)+reward.MIN
                         const newBalance=data.balance+wage
                         currencyModel.updateOne({ discord_id: user},{ balance: newBalance })
                         .then(() => {
@@ -29,9 +32,9 @@ module.exports={
                     } else {
                         currencyModel.create({
                             discord_id: user,
-                            balance: EARLY_WAGE
+                            balance: reward.EARLY
                         }).then(() => {
-                            message.reply(`karena anda baru mulai kerja, gaji awal lu adalah ${EARLY_WAGE}`)
+                            message.reply(`karena anda baru mulai kerja, gaji awal lu adalah ${reward.EARLY}`)
                             saveShiftSet(shift_set,user)
                         }).catch(err => {
                             console.log(err)
